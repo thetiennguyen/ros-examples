@@ -6,6 +6,8 @@ int main(int argc, char **argv)
 {
   ros::init(argc, argv, "talker");
 
+  ROS_INFO("chung toi dang hoc claude");
+
   ros::NodeHandle n;
 
   ros::Publisher chatter_pub =  
