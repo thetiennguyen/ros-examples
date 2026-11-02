@@ -1,6 +1,15 @@
 #include "ros/ros.h"
 #include "std_msgs/String.h"
 #include <sstream>
+#include <string>
+
+std::string custom_message = "hello world";
+
+void inputCallback(const std_msgs::String::ConstPtr& msg)
+{
+  custom_message = msg->data;
+  ROS_INFO("Updated custom message to: %s", custom_message.c_str());
+}
 
 int main(int argc, char **argv)
 {
@@ -10,8 +19,11 @@ int main(int argc, char **argv)
 
   ros::NodeHandle n;
 
-  ros::Publisher chatter_pub =  
+  ros::Publisher chatter_pub =
            n.advertise<std_msgs::String>("chatter", 1000);
+
+  ros::Subscriber input_sub =
+           n.subscribe("input_text", 1000, inputCallback);
 
   ros::Rate loop_rate(10);
 
@@ -20,7 +32,7 @@ int main(int argc, char **argv)
     std_msgs::String msg;
 
     std::stringstream ss;
-    ss << "hello world " << count;
+    ss << custom_message << " " << count;
     msg.data = ss.str();
 
     ROS_INFO("%s", msg.data.c_str());
